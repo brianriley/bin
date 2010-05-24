@@ -1,0 +1,37 @@
+#!/bin/bash
+
+MODULE_NAME=$1
+
+if [ ! $MODULE_NAME ]; then
+    echo "ERROR
+Usage: pymodule <new module name>"
+    exit 1
+fi
+
+function do_touch {
+    for file_name in $@; do
+        touch $MODULE_NAME/$file_name
+    done
+}
+
+function setup_test_template {
+    echo "import unittest
+
+class TestCase(unittest.TestCase):
+
+    def test_$MODULE_NAME(self):
+        assert True
+
+
+if __name__ == '__main__':
+    unittest.main()" > $MODULE_NAME/tests.py
+}
+
+mkdir $MODULE_NAME
+
+touch_files="__init__.py $MODULE_NAME.py"
+do_touch $touch_files
+
+setup_test_template
+
+exit 0

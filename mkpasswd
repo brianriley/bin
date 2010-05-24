@@ -1,0 +1,13 @@
+#!/bin/bash
+
+LENGTH=10
+
+function mkpass {
+    head /dev/urandom | uuencode -m - | sed -n 2p | cut -c1-${1:-$1}
+}
+
+if [ -z $1 ]; then
+    mkpass $LENGTH
+else
+    mkpass $1
+fi
